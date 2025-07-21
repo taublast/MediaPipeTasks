@@ -1,13 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net8.0-android</TargetFramework>
-    <SupportedOSPlatformVersion>24</SupportedOSPlatformVersion>
+    <SupportedOSPlatformVersion>25</SupportedOSPlatformVersion>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <PackOnBuild>true</PackOnBuild>
     <GeneratePackageOnBuild>$(PackOnBuild)</GeneratePackageOnBuild>
     <PackageId>MediaPipeTasksGenAI.Android</PackageId>
-    <PackageVersion>0.10.24</PackageVersion>
+    <PackageVersion>0.10.25</PackageVersion>
     <Authors>Howard Good</Authors>
     <PackageLicenseUrl>https://github.com/google-ai-edge/mediapipe/blob/master/LICENSE</PackageLicenseUrl>
     <Owners>https://www.nuget.org/profiles/v-hogood</Owners>
@@ -22,14 +22,13 @@
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\MediaPipeTasksCore\MediaPipeTasksCore.csproj" />
-    <ProjectReference Include="..\Protobuf.Internal\Protobuf.Internal.csproj" PrivateAssets="all" />
   </ItemGroup>
   <Target Name="IncludeProjectReferenceDlls" DependsOnTargets="BuildOnlySettings;ResolveReferences">
     <ItemGroup>
-      <BuildOutputInPackage Include="@(ReferenceCopyLocalPaths->WithMetadataValue('ReferenceSourceTarget', 'ProjectReference')->WithMetadataValue('PrivateAssets', 'all'))"/>
+      <BuildOutputInPackage Include="@(ReferenceCopyLocalPaths-&gt;WithMetadataValue('ReferenceSourceTarget', 'ProjectReference')-&gt;WithMetadataValue('PrivateAssets', 'all'))" />
     </ItemGroup>
   </Target>
   <Target Name="DownloadFile" BeforeTargets="_ExtractAar">
-    <DownloadFile SourceUrl="https://dl.google.com/android/maven2/com/google/mediapipe/tasks-genai/0.10.24/tasks-genai-0.10.24.aar" DestinationFolder="Jars" />
+    <DownloadFile SourceUrl="https://dl.google.com/android/maven2/com/google/mediapipe/tasks-genai/0.10.25/tasks-genai-0.10.25.aar" DestinationFolder="Jars" />
   </Target>
 </Project>
