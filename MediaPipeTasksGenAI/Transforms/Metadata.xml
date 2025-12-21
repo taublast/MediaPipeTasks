@@ -11,6 +11,10 @@
   <attr path="/api/package[@name='com.google.mediapipe.tasks.genai.llminference.jni.proto']/class[@name='LlmOptionsProto.LlmModelSettings.Builder']/method[@name='getLlmPreferredBackend']" name="propertyName">GetLlmPreferredBackend</attr>
   <attr path="/api/package[@name='com.google.mediapipe.tasks.genai.llminference.jni.proto']/interface[@name='LlmOptionsProto.LlmModelSettingsOrBuilder']/method[@name='getLlmPreferredBackend']" name="propertyName">GetLlmPreferredBackend</attr>
 
+  <attr path="/api/package[@name='com.google.mediapipe.tasks.genai.llminference.jni.proto']/class[@name='LlmOptionsProto.LlmModelSettings']/method[@name='getAudioModelSettings']" name="propertyName">GetAudioModelSettings</attr>
+  <attr path="/api/package[@name='com.google.mediapipe.tasks.genai.llminference.jni.proto']/class[@name='LlmOptionsProto.LlmModelSettings.Builder']/method[@name='getAudioModelSettings']" name="propertyName">GetAudioModelSettings</attr>
+  <attr path="/api/package[@name='com.google.mediapipe.tasks.genai.llminference.jni.proto']/interface[@name='LlmOptionsProto.LlmModelSettingsOrBuilder']/method[@name='getAudioModelSettings']" name="propertyName">GetAudioModelSettings</attr>
+
   <attr path="/api/package[@name='com.google.mediapipe.tasks.genai.llminference.jni.proto']/class[@name='LlmOptionsProto.LlmModelSettings']/method[@name='getVisionModelSettings']" name="propertyName">GetVisionModelSettings</attr>
   <attr path="/api/package[@name='com.google.mediapipe.tasks.genai.llminference.jni.proto']/class[@name='LlmOptionsProto.LlmModelSettings.Builder']/method[@name='getVisionModelSettings']" name="propertyName">GetVisionModelSettings</attr>
   <attr path="/api/package[@name='com.google.mediapipe.tasks.genai.llminference.jni.proto']/interface[@name='LlmOptionsProto.LlmModelSettingsOrBuilder']/method[@name='getVisionModelSettings']" name="propertyName">GetVisionModelSettings</attr>
