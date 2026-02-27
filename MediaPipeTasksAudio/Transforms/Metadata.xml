@@ -7,7 +7,6 @@
   <remove-node path="/api/package[@name='android.support.v4.content']/class[@name='CursorLoader']/method[@name='loadInBackground']" />
   -->
 
-  <attr path="/api/package[@name='com.google.mediapipe.tasks.audio.audioembedder']" name="managedName">MediaPipe.Tasks.Audio.AudioEmbedder</attr>
   <attr path="/api/package[@name='com.google.mediapipe.tasks.audio.audioclassifier']" name="managedName">MediaPipe.Tasks.Audio.AudioClassifier</attr>
   <attr path="/api/package[@name='com.google.mediapipe.tasks.audio.core']" name="managedName">MediaPipe.Tasks.Audio.Core</attr>
 

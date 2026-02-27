@@ -31,6 +31,9 @@
 
   <attr path="/api/package[@name='com.google.mediapipe.tasks.vision.interactivesegmenter.proto']/class[@name='RegionOfInterestProto.RegionOfInterest.FocusRegionCase']" name="managedName">RegionOfInterestProto.RegionOfInterest.FocusRegionCases</attr>
 
+  <attr path="/api/package[@name='com.google.mediapipe.tasks']/class[@name='TensorsToSegmentationCalculatorOptionsProto.TensorsToSegmentationCalculatorOptions.ConfidenceMaskOptions']" name="managedName">TensorsToSegmentationCalculatorOptionsProto.TensorsToSegmentationCalculatorOptions.ConfidenceMaskOption</attr>
+  <attr path="/api/package[@name='com.google.mediapipe.tasks']/class[@name='TensorsToSegmentationCalculatorOptionsProto.TensorsToSegmentationCalculatorOptions.ConfidenceMaskOptions.OutputFormat']" name="managedName">TensorsToSegmentationCalculatorOptionsProto.TensorsToSegmentationCalculatorOptions.ConfidenceMaskOption.OutputFormats</attr>
+
   <attr path="/api/package[@name='com.google.mediapipe.calculator.proto']/class[@name='InferenceCalculatorProto.InferenceCalculatorOptions.Delegate']" name="managedName">InferenceCalculatorProto.InferenceCalculatorOptions.Delegates</attr>
   <attr path="/api/package[@name='com.google.mediapipe.calculator.proto']/class[@name='InferenceCalculatorProto.InferenceCalculatorOptions.Delegate.DelegateCase']" name="managedName">InferenceCalculatorProto.InferenceCalculatorOptions.Delegates.DelegatesCase</attr>
   <attr path="/api/package[@name='com.google.mediapipe.calculator.proto']/class[@name='InferenceCalculatorProto.InferenceCalculatorOptions.Delegate.Gpu']" name="managedName">InferenceCalculatorProto.InferenceCalculatorOptions.Delegates.GPU</attr>
@@ -77,7 +80,6 @@
   <attr path="/api/package[@name='com.google.mediapipe.proto']" name="managedName">MediaPipe.Proto</attr>
   <attr path="/api/package[@name='com.google.mediapipe.tasks']" name="managedName">MediaPipe.Tasks</attr>
   <attr path="/api/package[@name='com.google.mediapipe.tasks.audio.audioclassifier.proto']" name="managedName">MediaPipe.Tasks.Audio.AudioClassifier.Proto</attr>
-  <attr path="/api/package[@name='com.google.mediapipe.tasks.audio.audioembedder.proto']" name="managedName">MediaPipe.Tasks.Audio.AudioEmbedder.Proto</attr>
   <attr path="/api/package[@name='com.google.mediapipe.tasks.components.containers']" name="managedName">MediaPipe.Tasks.Components.Containers</attr>
   <attr path="/api/package[@name='com.google.mediapipe.tasks.components.containers.proto']" name="managedName">MediaPipe.Tasks.Components.Containers.Proto</attr>
   <attr path="/api/package[@name='com.google.mediapipe.tasks.components.processors']" name="managedName">MediaPipe.Tasks.Components.Processors</attr>
