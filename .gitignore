@@ -1,6 +1,6 @@
 bin
 obj
-.vs
+.vs*
 *.aar
 *.jar
 *.tar.gz
