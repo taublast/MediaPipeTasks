@@ -67,24 +67,11 @@ public partial class FaceLandmarkerResult
 {
     private static class RawFaceLandmarkJni
     {
-        private static IntPtr NewGlobalClassRef(string className)
-        {
-            var localRef = JNIEnv.FindClass(className);
-            try
-            {
-                return JNIEnv.NewGlobalRef(localRef);
-            }
-            finally
-            {
-                JNIEnv.DeleteLocalRef(localRef);
-            }
-        }
-
         internal static readonly IntPtr FaceLandmarksMethod = JNIEnv.GetMethodID(class_ref, "faceLandmarks", "()Ljava/util/List;");
-        private static readonly IntPtr JavaListClass = NewGlobalClassRef("java/util/List");
-        private static readonly IntPtr JavaOptionalClass = NewGlobalClassRef("java/util/Optional");
-        private static readonly IntPtr JavaFloatClass = NewGlobalClassRef("java/lang/Float");
-        private static readonly IntPtr NormalizedLandmarkClass = NewGlobalClassRef("com/google/mediapipe/tasks/components/containers/NormalizedLandmark");
+        private static readonly IntPtr JavaListClass = JNIEnv.NewGlobalRef(JNIEnv.FindClass("java/util/List"));
+        private static readonly IntPtr JavaOptionalClass = JNIEnv.NewGlobalRef(JNIEnv.FindClass("java/util/Optional"));
+        private static readonly IntPtr JavaFloatClass = JNIEnv.NewGlobalRef(JNIEnv.FindClass("java/lang/Float"));
+        private static readonly IntPtr NormalizedLandmarkClass = JNIEnv.NewGlobalRef(JNIEnv.FindClass("com/google/mediapipe/tasks/components/containers/NormalizedLandmark"));
         internal static readonly IntPtr ListSizeMethod = JNIEnv.GetMethodID(JavaListClass, "size", "()I");
         internal static readonly IntPtr ListGetMethod = JNIEnv.GetMethodID(JavaListClass, "get", "(I)Ljava/lang/Object;");
         internal static readonly IntPtr OptionalIsPresentMethod = JNIEnv.GetMethodID(JavaOptionalClass, "isPresent", "()Z");
