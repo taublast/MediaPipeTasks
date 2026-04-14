@@ -68,10 +68,10 @@ public partial class FaceLandmarkerResult
     private static class RawFaceLandmarkJni
     {
         internal static readonly IntPtr FaceLandmarksMethod = JNIEnv.GetMethodID(class_ref, "faceLandmarks", "()Ljava/util/List;");
-        internal static readonly IntPtr JavaListClass = JNIEnv.NewGlobalRef(JNIEnv.FindClass("java/util/List"));
-        internal static readonly IntPtr JavaOptionalClass = JNIEnv.NewGlobalRef(JNIEnv.FindClass("java/util/Optional"));
-        internal static readonly IntPtr JavaFloatClass = JNIEnv.NewGlobalRef(JNIEnv.FindClass("java/lang/Float"));
-        internal static readonly IntPtr NormalizedLandmarkClass = JNIEnv.NewGlobalRef(JNIEnv.FindClass("com/google/mediapipe/tasks/components/containers/NormalizedLandmark"));
+        private static readonly IntPtr JavaListClass = JNIEnv.NewGlobalRef(JNIEnv.FindClass("java/util/List"));
+        private static readonly IntPtr JavaOptionalClass = JNIEnv.NewGlobalRef(JNIEnv.FindClass("java/util/Optional"));
+        private static readonly IntPtr JavaFloatClass = JNIEnv.NewGlobalRef(JNIEnv.FindClass("java/lang/Float"));
+        private static readonly IntPtr NormalizedLandmarkClass = JNIEnv.NewGlobalRef(JNIEnv.FindClass("com/google/mediapipe/tasks/components/containers/NormalizedLandmark"));
         internal static readonly IntPtr ListSizeMethod = JNIEnv.GetMethodID(JavaListClass, "size", "()I");
         internal static readonly IntPtr ListGetMethod = JNIEnv.GetMethodID(JavaListClass, "get", "(I)Ljava/lang/Object;");
         internal static readonly IntPtr OptionalIsPresentMethod = JNIEnv.GetMethodID(JavaOptionalClass, "isPresent", "()Z");
@@ -94,11 +94,10 @@ public partial class FaceLandmarkerResult
     /// <remarks>
     /// This method exists to avoid the heavy wrapper and JNI cost of traversing the
     /// generated <c>IList&lt;IList&lt;NormalizedLandmark&gt;&gt;</c> result shape in real-time paths.
-    /// The method is marked <c>unsafe</c> only because the implementation uses a stack-allocated
-    /// <c>JValue</c> scratch buffer to avoid per-call argument array allocations in the hot path.
-    /// The packed return shape itself does not inherently require unsafe code.
+    /// The underlying implementation uses a stack-allocated <c>JValue</c> scratch buffer
+    /// to avoid per-call argument array allocations in the hot path.
     /// </remarks>
-    public unsafe float[][] FaceLandmarksXY()
+    public float[][] FaceLandmarksXY()
     {
         return ExtractPackedCoordinates(includeZ: false);
     }
@@ -114,7 +113,7 @@ public partial class FaceLandmarkerResult
     /// This provides the same low-overhead traversal pattern as <see cref="FaceLandmarksXY"/>,
     /// but retains depth values for consumers that need the full coordinate triplet.
     /// </remarks>
-    public unsafe float[][] FaceLandmarksXYZ()
+    public float[][] FaceLandmarksXYZ()
     {
         return ExtractPackedCoordinates(includeZ: true);
     }
