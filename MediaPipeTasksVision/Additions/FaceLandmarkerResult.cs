@@ -68,10 +68,10 @@ public partial class FaceLandmarkerResult
     private static class RawFaceLandmarkJni
     {
         internal static readonly IntPtr FaceLandmarksMethod = JNIEnv.GetMethodID(class_ref, "faceLandmarks", "()Ljava/util/List;");
-        private static readonly IntPtr JavaListClass = JNIEnv.NewGlobalRef(JNIEnv.FindClass("java/util/List"));
-        private static readonly IntPtr JavaOptionalClass = JNIEnv.NewGlobalRef(JNIEnv.FindClass("java/util/Optional"));
-        private static readonly IntPtr JavaFloatClass = JNIEnv.NewGlobalRef(JNIEnv.FindClass("java/lang/Float"));
-        private static readonly IntPtr NormalizedLandmarkClass = JNIEnv.NewGlobalRef(JNIEnv.FindClass("com/google/mediapipe/tasks/components/containers/NormalizedLandmark"));
+        private static readonly IntPtr JavaListClass = JniOwnershipHelper.RequireClassRef("java/util/List");
+        private static readonly IntPtr JavaOptionalClass = JniOwnershipHelper.RequireClassRef("java/util/Optional");
+        private static readonly IntPtr JavaFloatClass = JniOwnershipHelper.RequireClassRef("java/lang/Float");
+        private static readonly IntPtr NormalizedLandmarkClass = JniOwnershipHelper.RequireClassRef("com/google/mediapipe/tasks/components/containers/NormalizedLandmark");
         internal static readonly IntPtr ListSizeMethod = JNIEnv.GetMethodID(JavaListClass, "size", "()I");
         internal static readonly IntPtr ListGetMethod = JNIEnv.GetMethodID(JavaListClass, "get", "(I)Ljava/lang/Object;");
         internal static readonly IntPtr OptionalIsPresentMethod = JNIEnv.GetMethodID(JavaOptionalClass, "isPresent", "()Z");
@@ -82,6 +82,62 @@ public partial class FaceLandmarkerResult
         internal static readonly IntPtr LandmarkZMethod = JNIEnv.GetMethodID(NormalizedLandmarkClass, "z", "()F");
         internal static readonly IntPtr LandmarkVisibilityMethod = JNIEnv.GetMethodID(NormalizedLandmarkClass, "visibility", "()Ljava/util/Optional;");
         internal static readonly IntPtr LandmarkPresenceMethod = JNIEnv.GetMethodID(NormalizedLandmarkClass, "presence", "()Ljava/util/Optional;");
+    }
+
+    [Register("faceLandmarks", "()Ljava/util/List;", "")]
+    public List<IList<MediaPipe.Tasks.Components.Containers.NormalizedLandmark>> FaceLandmarks()
+    {
+        var outerListHandle = JNIEnv.CallObjectMethod(Handle, RawFaceLandmarkJni.FaceLandmarksMethod);
+        if (outerListHandle == IntPtr.Zero)
+            return [];
+
+        try
+        {
+            int faceCount = JNIEnv.CallIntMethod(outerListHandle, RawFaceLandmarkJni.ListSizeMethod);
+            if (faceCount <= 0)
+                return [];
+
+            var faces = new List<IList<MediaPipe.Tasks.Components.Containers.NormalizedLandmark>>(faceCount);
+            var indexArgs = new JValue[1];
+
+            for (int faceIndex = 0; faceIndex < faceCount; faceIndex++)
+            {
+                var landmarkListHandle = GetListItem(outerListHandle, indexArgs, faceIndex);
+                if (landmarkListHandle == IntPtr.Zero)
+                {
+                    faces.Add([]);
+                    continue;
+                }
+
+                try
+                {
+                    int landmarkCount = JNIEnv.CallIntMethod(landmarkListHandle, RawFaceLandmarkJni.ListSizeMethod);
+                    var landmarks = new List<MediaPipe.Tasks.Components.Containers.NormalizedLandmark>(landmarkCount);
+
+                    for (int landmarkIndex = 0; landmarkIndex < landmarkCount; landmarkIndex++)
+                    {
+                        var landmarkHandle = GetListItem(landmarkListHandle, indexArgs, landmarkIndex);
+                        var landmark = JniOwnershipHelper.GetObject<MediaPipe.Tasks.Components.Containers.NormalizedLandmark>(landmarkHandle);
+                        if (landmark is not null)
+                        {
+                            landmarks.Add(landmark);
+                        }
+                    }
+
+                    faces.Add(landmarks);
+                }
+                finally
+                {
+                    JniOwnershipHelper.DeleteReturnedRef(landmarkListHandle);
+                }
+            }
+
+            return faces;
+        }
+        finally
+        {
+            JniOwnershipHelper.DeleteReturnedRef(outerListHandle);
+        }
     }
 
     /// <summary>
@@ -130,7 +186,7 @@ public partial class FaceLandmarkerResult
     /// <see cref="FaceLandmarksXY"/> or <see cref="FaceLandmarksXYZ"/>, but still want to avoid
     /// materializing the generated nested landmark wrapper graph.
     /// </remarks>
-    public unsafe DetailedFaceLandmarks[] FaceLandmarksDetailed()
+    public DetailedFaceLandmarks[] FaceLandmarksDetailed()
     {
         var outerListHandle = JNIEnv.CallObjectMethod(Handle, RawFaceLandmarkJni.FaceLandmarksMethod);
         if (outerListHandle == IntPtr.Zero)
@@ -143,7 +199,7 @@ public partial class FaceLandmarkerResult
                 return [];
 
             var faces = new DetailedFaceLandmarks[faceCount];
-            JValue* indexArgs = stackalloc JValue[1];
+            var indexArgs = new JValue[1];
 
             for (int faceIndex = 0; faceIndex < faceCount; faceIndex++)
             {
@@ -190,7 +246,7 @@ public partial class FaceLandmarkerResult
                         }
                         finally
                         {
-                            JNIEnv.DeleteLocalRef(landmarkHandle);
+                            JniOwnershipHelper.DeleteReturnedRef(landmarkHandle);
                         }
                     }
 
@@ -198,7 +254,7 @@ public partial class FaceLandmarkerResult
                 }
                 finally
                 {
-                    JNIEnv.DeleteLocalRef(landmarkListHandle);
+                    JniOwnershipHelper.DeleteReturnedRef(landmarkListHandle);
                 }
             }
 
@@ -206,11 +262,11 @@ public partial class FaceLandmarkerResult
         }
         finally
         {
-            JNIEnv.DeleteLocalRef(outerListHandle);
+            JniOwnershipHelper.DeleteReturnedRef(outerListHandle);
         }
     }
 
-    private unsafe float[][] ExtractPackedCoordinates(bool includeZ)
+    private float[][] ExtractPackedCoordinates(bool includeZ)
     {
         var outerListHandle = JNIEnv.CallObjectMethod(Handle, RawFaceLandmarkJni.FaceLandmarksMethod);
         if (outerListHandle == IntPtr.Zero)
@@ -224,7 +280,7 @@ public partial class FaceLandmarkerResult
 
             int coordinateStride = includeZ ? 3 : 2;
             var faces = new float[faceCount][];
-            JValue* indexArgs = stackalloc JValue[1];
+            var indexArgs = new JValue[1];
 
             for (int faceIndex = 0; faceIndex < faceCount; faceIndex++)
             {
@@ -258,7 +314,7 @@ public partial class FaceLandmarkerResult
                         }
                         finally
                         {
-                            JNIEnv.DeleteLocalRef(landmarkHandle);
+                            JniOwnershipHelper.DeleteReturnedRef(landmarkHandle);
                         }
                     }
 
@@ -266,7 +322,7 @@ public partial class FaceLandmarkerResult
                 }
                 finally
                 {
-                    JNIEnv.DeleteLocalRef(landmarkListHandle);
+                    JniOwnershipHelper.DeleteReturnedRef(landmarkListHandle);
                 }
             }
 
@@ -274,11 +330,11 @@ public partial class FaceLandmarkerResult
         }
         finally
         {
-            JNIEnv.DeleteLocalRef(outerListHandle);
+            JniOwnershipHelper.DeleteReturnedRef(outerListHandle);
         }
     }
 
-    private static unsafe IntPtr GetListItem(IntPtr listHandle, JValue* indexArgs, int index)
+    private static IntPtr GetListItem(IntPtr listHandle, JValue[] indexArgs, int index)
     {
         indexArgs[0] = new JValue(index);
         return JNIEnv.CallObjectMethod(listHandle, RawFaceLandmarkJni.ListGetMethod, indexArgs);
@@ -308,12 +364,12 @@ public partial class FaceLandmarkerResult
             }
             finally
             {
-                JNIEnv.DeleteLocalRef(boxedFloatHandle);
+                JniOwnershipHelper.DeleteReturnedRef(boxedFloatHandle);
             }
         }
         finally
         {
-            JNIEnv.DeleteLocalRef(optionalHandle);
+            JniOwnershipHelper.DeleteReturnedRef(optionalHandle);
         }
     }
 }
